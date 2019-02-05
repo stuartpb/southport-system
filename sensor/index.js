@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 const button = new Gpio(3, 'in', 'both');
 
 const RING_ENDPOINT = process.env.RING_ENDPOINT || 'localhost';
+const RING_DURATION = process.env.RING_DURATION;
 
 const ringEdge = 0; // ring on falling edge
 
@@ -19,7 +20,7 @@ button.watch((err, value) => {
 
   if (value == ringEdge) {
     console.log('sensor input detected');
-    return postRing();
+    return postRing(RING_DURATION);
   }
 });
 
