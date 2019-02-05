@@ -8,7 +8,8 @@ const ringEdge = 0; // ring on falling edge
 
 function postRing(duration) {
   return fetch(`http://${RING_ENDPOINT}/ring${
-    duration ? '?duration=' + duration : ''}`, {method: 'POST'});
+    duration ? '?duration=' + duration : ''}`, {method: 'POST'})
+    .then(console.log);
 }
 
 button.watch((err, value) => {
