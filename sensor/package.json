@@ -1,0 +1,15 @@
+{
+  "name": "southport-sensor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stuart P. Bentley <s@stuartpb.com>",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.3.0",
+    "onoff": "^3.2.2"
+  }
+}
