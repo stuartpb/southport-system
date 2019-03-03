@@ -15,16 +15,18 @@ const STILL_DURATION = process.env.STILL_DURATION;
 const ringEdge = 0; // ring on falling edge
 
 function notifyHerald() {
-  return Promise.all([
+  const fetches = [fetch(`${HERALD_ENDPOINT}/ring${
+    RING_DURATION ? '?duration=' + RING_DURATION : ''}`,
+    {method: 'POST'})];
 
-    fetch(`${HERALD_ENDPOINT}/ring${
-      RING_DURATION ? '?duration=' + RING_DURATION : ''}`,
-      {method: 'POST'}),
-
-    fetch(`${HERALD_ENDPOINT}/present/still?location=${
+  if (SNAP_URL) {
+    fetches.push(fetch(`${HERALD_ENDPOINT}/present/still?location=${
       encodeURIComponent(SNAP_URL)}${
       STILL_DURATION ? '&duration=' + STILL_DURATION : ''}`,
-      {method: 'POST'})].map(p=>p.catch(console.error)));
+      {method: 'POST'}));
+  }
+
+  return Promise.all(fetches.map(p=>p.catch(console.error)));
 }
 
 sensor.watch((err, value) => {
