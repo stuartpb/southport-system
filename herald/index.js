@@ -27,7 +27,8 @@ function ringBell(duration) {
 }
 
 app.post('/ring', (req, res) => {
-  ringBell(req.query.duration);
+  ringBell(req.query.duration).catch(console.error)
+  res.send();
 });
 
 let viewerProcess = null;
@@ -61,10 +62,14 @@ function startViewerProcess(location, duration) {
   return Promise.resolve();
 }
 
-app.post('/present/still', (req, res) => {
-  // wake the display
-  execa('xset', 'dpms force on'.split(' '), {DISPLAY});
-  startViewerProcess(req.query.location, req.query.duration);
+app.post('/present/still', (req, res, next) => {
+  return Promise.all([
+    // wake the display
+    execa('xset', 'dpms force on'.split(' '), {DISPLAY}),
+    // present the still
+    startViewerProcess(req.query.location, req.query.duration)
+
+    ]).then(res.send.bind(), next);
 });
 
 app.listen(80);
