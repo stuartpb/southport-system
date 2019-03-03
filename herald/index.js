@@ -55,7 +55,12 @@ function startViewerProcess(location, duration) {
 
   // set up a new viewer process
   viewerProcess = execa(VIEWER, [location], {
-    uid: X_UID, gid: X_GID, env: {DISPLAY}}).catch(console.error);
+    uid: X_UID, gid: X_GID, env: {DISPLAY}});
+
+  // if the viewer errors, log to console
+  viewerProcess.catch(console.error);
+
+  // set up timeout if displaying for a limited duration
   if (duration) {
     viewerTimeout = setTimeout(killViewerProcess, duration);
   }
