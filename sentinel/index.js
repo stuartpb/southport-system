@@ -24,7 +24,7 @@ function notifyHerald() {
     fetch(`${HERALD_ENDPOINT}/present/still?location=${
       encodeURIComponent(SNAP_URL)}${
       STILL_DURATION ? '&duration=' + STILL_DURATION : ''}`,
-      {method: 'POST'})]);
+      {method: 'POST'})].map(p=>p.catch(console.error)));
 }
 
 sensor.watch((err, value) => {
