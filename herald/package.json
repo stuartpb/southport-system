@@ -9,6 +9,7 @@
   "author": "Stuart P. Bentley <s@stuartpb.com>",
   "license": "ISC",
   "dependencies": {
+    "execa": "^1.0.0",
     "express": "^4.16.4",
     "onoff": "^3.2.2"
   }
