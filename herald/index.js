@@ -50,7 +50,8 @@ function killViewerProcess() {
 
   // send the termination signal and return promise for when the process ends
   viewerProcess.kill();
-  return viewerProcess.then(()=>viewerProcess = null);
+  const lose = () => viewerProcess = null;
+  return viewerProcess.then(lose, lose);
 }
 
 function startViewerProcess(location, duration) {
