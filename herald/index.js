@@ -11,6 +11,8 @@ const app = require('express')();
 
 const VIEWER = 'feh';
 const DISPLAY = ':0';
+const X_UID = 1000;
+const X_GID = 1000;
 
 app.use(morgan('[:date[iso]] :remote-addr ":method :url HTTP/:http-version" :status :res[content-length]'));
 
@@ -52,7 +54,8 @@ function startViewerProcess(location, duration) {
   }
 
   // set up a new viewer process
-  viewerProcess = execa(VIEWER, [location], {env: {DISPLAY}});
+  viewerProcess = execa(VIEWER, [location], {
+    uid: X_UID, gid: X_GID, env: {DISPLAY}}).catch(console.error);
   if (duration) {
     viewerTimeout = setTimeout(killViewerProcess, duration);
   }
@@ -65,7 +68,8 @@ function startViewerProcess(location, duration) {
 app.post('/present/still', (req, res, next) => {
   return Promise.all([
     // wake the display
-    execa('xset', 'dpms force on'.split(' '), {env: {DISPLAY}}),
+    execa('xset', 'dpms force on'.split(' '), {
+      uid: X_UID, gid: X_GID, env: {DISPLAY}}),
     // present the still
     startViewerProcess(req.query.location, req.query.duration)
 
