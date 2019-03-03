@@ -73,7 +73,7 @@ app.post('/present/still', (req, res, next) => {
     // present the still
     startViewerProcess(req.query.location, req.query.duration)
 
-    ]).then(res.send.bind(), next);
+    ]).then(res.send.bind(res), next);
 });
 
 app.listen(80);
