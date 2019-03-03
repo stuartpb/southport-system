@@ -41,3 +41,5 @@ sensor.watch((err, value) => {
 process.on('SIGINT', () => {
   sensor.unexport();
 });
+
+console.log('posting to ' + HERALD_ENDPOINT);

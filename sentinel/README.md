@@ -13,5 +13,5 @@ Then, as root:
 ```
 mkdir /etc/systemd/system/southport-sentinel.service.d/
 cp env.template.conf /etc/systemd/system/southport-sentinel.service.d/env.conf
-systemctl enable --now southport-sentinel.service
+systemctl enable --now $PWD/southport-sentinel.service
 ```
