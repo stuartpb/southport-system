@@ -13,6 +13,8 @@ const VIEWER = 'feh';
 const DISPLAY = ':0';
 const X_UID = 1000;
 const X_GID = 1000;
+const HOME = '/home/pi'; // feh fails without HOME in the environment
+// hardcoding this location is admittedly pretty hacky, but meh
 
 app.use(morgan('[:date[iso]] :remote-addr ":method :url HTTP/:http-version" :status :res[content-length]'));
 
@@ -29,7 +31,7 @@ function ringBell(duration) {
 }
 
 app.post('/ring', (req, res) => {
-  ringBell(req.query.duration).catch(console.error)
+  ringBell(req.query.duration).catch(console.error);
   res.send();
 });
 
@@ -55,7 +57,7 @@ function startViewerProcess(location, duration) {
 
   // set up a new viewer process
   viewerProcess = execa(VIEWER, [location], {
-    uid: X_UID, gid: X_GID, env: {DISPLAY}});
+    uid: X_UID, gid: X_GID, env: {DISPLAY, HOME}});
 
   // if the viewer errors, log to console
   viewerProcess.catch(console.error);
