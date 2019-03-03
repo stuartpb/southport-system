@@ -38,6 +38,11 @@ app.post('/ring', (req, res) => {
 let viewerProcess = null;
 let viewerTimeout = null;
 
+function logNonSigTermErrors(e) {
+  // if the process wasn't terminated by SIGTERM, log this error
+  if (e.code != 143) console.error(e);
+}
+
 function killViewerProcess() {
   // clear timeout in case this function is being called early
   clearTimeout(viewerTimeout);
@@ -45,7 +50,7 @@ function killViewerProcess() {
 
   // send the termination signal and return promise for when the process ends
   viewerProcess.kill();
-  return viewerProcess.catch(()=>{}).then(()=>viewerProcess = null);
+  return viewerProcess.then(()=>viewerProcess = null);
 }
 
 function startViewerProcess(location, duration) {
@@ -59,8 +64,8 @@ function startViewerProcess(location, duration) {
   viewerProcess = execa(VIEWER, [location], {
     uid: X_UID, gid: X_GID, env: {DISPLAY, HOME}});
 
-  // if the viewer errors, log to console
-  viewerProcess.catch(console.error);
+  // log any errors, except the one we're expecting
+  viewerProcess.catch(logNonSigTermErrors);
 
   // set up timeout if displaying for a limited duration
   if (duration) {
