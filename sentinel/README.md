@@ -4,6 +4,8 @@ This is the daemon that runs at the end of the driveway, signalling the endpoint
 
 ## Installing the Sentinel Service
 
+Run `npm install` to install all the dependencies of the server.
+
 Edit the parameters in the env.template.conf file here.
 
 Then, as root:
