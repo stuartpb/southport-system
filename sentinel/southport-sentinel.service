@@ -1,10 +1,10 @@
 [Unit]
-Description=Southport Sensor Service
+Description=Southport Sentinel Service
 After=network.target
 
 [Service]
 Environment=RING_ENDPOINT=192.168.7.12 RING_DURATION=5000
-ExecStart=/usr/bin/node /home/pi/southport-system/sensor/index.js
+ExecStart=/usr/bin/node /home/pi/southport-system/sentinel/index.js
 
 [Install]
 WantedBy=multi-user.target

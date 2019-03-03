@@ -1,5 +1,5 @@
 {
-  "name": "southport-ringer",
+  "name": "southport-sentinel",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   "author": "Stuart P. Bentley <s@stuartpb.com>",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4",
+    "node-fetch": "^2.3.0",
     "onoff": "^3.2.2"
   }
 }
