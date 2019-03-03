@@ -52,7 +52,7 @@ function startViewerProcess(location, duration) {
   }
 
   // set up a new viewer process
-  viewerProcess = execa(VIEWER, [location], {DISPLAY});
+  viewerProcess = execa(VIEWER, [location], {env: {DISPLAY}});
   if (duration) {
     viewerTimeout = setTimeout(killViewerProcess, duration);
   }
@@ -65,7 +65,7 @@ function startViewerProcess(location, duration) {
 app.post('/present/still', (req, res, next) => {
   return Promise.all([
     // wake the display
-    execa('xset', 'dpms force on'.split(' '), {DISPLAY}),
+    execa('xset', 'dpms force on'.split(' '), {env: {DISPLAY}}),
     // present the still
     startViewerProcess(req.query.location, req.query.duration)
 
