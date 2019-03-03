@@ -9,7 +9,6 @@ const execa = require('execa');
 
 const app = require('express')();
 
-const VIEWER = 'feh';
 const DISPLAY = ':0';
 const X_UID = 1000;
 const X_GID = 1000;
@@ -62,7 +61,7 @@ function startViewerProcess(location, duration) {
   }
 
   // set up a new viewer process
-  viewerProcess = execa(VIEWER, [location], {
+  viewerProcess = execa('feh', ['-F', location], {
     uid: X_UID, gid: X_GID, env: {DISPLAY, HOME}});
 
   // log any errors, except the one we're expecting
