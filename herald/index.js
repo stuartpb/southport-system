@@ -5,6 +5,8 @@ const relay = new Gpio(4, 'high', {activeLow: true});
 
 const morgan = require('morgan');
 
+const fetch = require('node-fetch');
+
 const execa = require('execa');
 
 const app = require('express')();
@@ -53,16 +55,42 @@ function killViewerProcess() {
   return viewerProcess.then(lose, lose);
 }
 
-function startViewerProcess(location, duration) {
+class HTTPResponseError extends Error {
+  constructor(response, ...args) {
+    this.response = response;
+    super(`HTTP Error Response: ${response.status} ${response.statusText}`, ...args);
+  }
+}
+
+const checkStatus = response => {
+  if (response.ok) {
+    // response.status >= 200 && response.status < 300
+    return response;
+  } else {
+    throw new HTTPResponseError(response);
+  }
+}
+
+function fetchAndDisplay(location, duration) {
+  return fetch(location).then(res => {
+    // throw error if image request is not OK
+    checkStatus(res);
+
+    // stream image to new viewer process
+    return startViewerProcess(res.body, duration);
+  });
+}
+
+function startViewerProcess(imageStream, duration) {
   // defer to the termination of any existing viewer process
   if (viewerProcess) {
     return killViewerProcess().then(
-      startViewerProcess.bind(null, location, duration));
+      startViewerProcess.bind(null, imageStream, duration));
   }
 
   // set up a new viewer process
-  viewerProcess = execa('feh', ['-F', location], {
-    uid: X_UID, gid: X_GID, env: {DISPLAY, HOME}});
+  viewerProcess = execa('feh', ['-F', '-'], {
+    uid: X_UID, gid: X_GID, env: {DISPLAY, HOME}, input: imageStream});
 
   // log any errors, except the one we're expecting
   viewerProcess.catch(logNonSigTermErrors);
@@ -83,7 +111,7 @@ app.post('/present/still', (req, res, next) => {
     execa('xset', 'dpms force on'.split(' '), {
       uid: X_UID, gid: X_GID, env: {DISPLAY}}),
     // present the still
-    startViewerProcess(req.query.location, req.query.duration)
+    fetchAndDisplay(req.query.location, req.query.duration)
 
     ].map(p=>p.catch(next))).then(()=>res.send());
 });
