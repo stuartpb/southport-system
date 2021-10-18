@@ -17,3 +17,7 @@ Redid DHCP leases for one RPi after blowing the voltage regulator
 ## 2019-03-03
 
 Installed feh on homebase pi, renaming and reinstalling services
+
+## 2021-10-18
+
+swapped out old Rapunzel Pi 3B (sentinel node) which had gone faulty (GPIO pins not responding) for a fresh Pi 4B running its own Raspbian instance that had had some configuration already applied; Node 10 appears to have been installed already. Changed the hostname to `rapunzel`, updated DHCP leases and ran sentinel installation directions per README
