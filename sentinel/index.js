@@ -1,6 +1,7 @@
 const Gpio = require('onoff').Gpio;
 const fetch = require('node-fetch');
-const sensor = new Gpio(3, 'in', 'both');
+const sensor = new Gpio(3, 'in', 'both',
+  {debounceTimeout: process.env.DEBOUNCE_TIME || 0});
 
 function ensureHttp(address) {
   if (!/https?:/.test(address)) address = 'http://' + address;
