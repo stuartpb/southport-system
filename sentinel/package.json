@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.3.0",
-    "onoff": "^3.2.2"
+    "onoff": "^6.0.3"
   }
 }
