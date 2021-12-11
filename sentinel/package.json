@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.3.0",
-    "onoff": "^6.0.3"
+    "onoff": "^6.0.3",
+    "lodash.debounce": "^4.0.8"
   }
 }
