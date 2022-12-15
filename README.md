@@ -4,7 +4,7 @@ A set of scripts and files used for a Raspberry-Pi-based home automation solutio
 
 ## Installing
 
-As the `pi` user on the system, from the user's home directory:
+As the `southport` user on the system, from the user's home directory:
 
 ```sh
 git clone https://github.com/stuartpb/southport-system.git
@@ -13,5 +13,5 @@ git clone https://github.com/stuartpb/southport-system.git
 # adjust as appropriate
 cd southport-system/$THIS_END
 npm install
-sudo systemctl enable --now /home/pi/southport-system/$THIS_END/southport-$THIS_END.service
+sudo systemctl enable --now /home/southport/southport-system/$THIS_END/southport-$THIS_END.service
 ```

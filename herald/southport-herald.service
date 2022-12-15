@@ -3,7 +3,7 @@ Description=Southport Herald Service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /home/pi/southport-system/herald/index.js
+ExecStart=/usr/bin/node /home/southport/southport-system/herald/index.js
 
 [Install]
 WantedBy=multi-user.target
