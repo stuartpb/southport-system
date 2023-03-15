@@ -9,8 +9,10 @@
   "author": "Stuart P. Bentley <s@stuartpb.com>",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^2.3.0",
+    "lodash.debounce": "^4.0.8",
+    "node-fetch": "^2.6.9",
+    "nodemailer": "^6.9.1",
     "onoff": "^6.0.3",
-    "lodash.debounce": "^4.0.8"
+    "uuid": "^9.0.0"
   }
 }
