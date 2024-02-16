@@ -12,7 +12,7 @@ const app = require('express')();
 const DISPLAY = ':0';
 const X_UID = 1000;
 const X_GID = 1000;
-const HOME = '/home/pi'; // feh fails without HOME in the environment
+const HOME = '/home/southport'; // feh fails without HOME in the environment
 // hardcoding this location is admittedly pretty hacky, but meh
 
 app.use(morgan('[:date[iso]] :remote-addr ":method :url HTTP/:http-version" :status :res[content-length]'));
