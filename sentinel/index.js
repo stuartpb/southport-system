@@ -79,7 +79,7 @@ function postNotifications() {
   if (EMAIL_RECIPIENT)
     notifications.push(sendEmailNotification());
   
-  return Promise.all(notifications);
+  return Promise.all(notifications.map(p=>p.catch(console.error)));
 }
 
 const sensorTriggered = debounce(postNotifications, DEBOUNCE_TIME, {
