@@ -27,6 +27,7 @@ const EMAIL_ATTACHMENT_FILENAME =
 
 const SMTP_HOSTNAME = process.env.SMTP_HOSTNAME;
 const SMTP_PORT = parseInt(process.env.SMTP_PORT) || 465;
+const SMTP_SECURE = process.env.SMTP_SECURE || (SMTP_PORT == 465);
 const SMTP_USERNAME = process.env.SMTP_USERNAME || EMAIL_SENDER_ADDRESS;
 const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
 
@@ -51,6 +52,7 @@ function notifyHerald() {
 const mailer = EMAIL_RECIPIENT && nodemailer.createTransport({
   host: SMTP_HOSTNAME,
   port: SMTP_PORT,
+  secure: SMTP_SECURE,
   auth: {
     user: SMTP_USERNAME,
     pass: SMTP_PASSWORD,
