@@ -101,6 +101,11 @@ process.on('SIGINT', () => {
   sensor.unexport();
 });
 
+process.on('SIGUSR1', () => {
+  console.log('received SIGUSR1, synthesizing sensor trigger');
+  return sensorTriggered();
+});
+
 if (mailer) {
   console.log(`will be emailing ${EMAIL_RECIPIENT
     } from ${EMAIL_SENDER_ADDRESS}`);
