@@ -45,10 +45,10 @@ function notifyHerald() {
       {method: 'POST'}));
   }
 
-  return Promise.all(fetches.map(p=>p.catch(console.error)));
+  return Promise.all(fetches.map(p => p.catch(console.error)));
 }
 
-const mailer = nodemailer.createTransport({
+const mailer = EMAIL_RECIPIENT && nodemailer.createTransport({
   host: SMTP_HOSTNAME,
   port: SMTP_PORT,
   auth: {
@@ -76,10 +76,10 @@ function sendEmailNotification() {
 function postNotifications() {
   const notifications = [notifyHerald()];
 
-  if (EMAIL_RECIPIENT)
-    notifications.push(sendEmailNotification());
+  if (mailer) notifications.push(sendEmailNotification())
+    .then(info => console.log('email sent:', info));
   
-  return Promise.all(notifications.map(p=>p.catch(console.error)));
+  return Promise.all(notifications.map(p => p.catch(console.error)));
 }
 
 const sensorTriggered = debounce(postNotifications, DEBOUNCE_TIME, {
@@ -101,4 +101,11 @@ process.on('SIGINT', () => {
   sensor.unexport();
 });
 
-console.log('posting to ' + HERALD_ENDPOINT);
+if (mailer) {
+  console.log(`will be emailing ${EMAIL_RECIPIENT
+    } from ${EMAIL_SENDER_ADDRESS}`);
+  mailer.verify().then(() => console.log(`smtp ok at ${SMTP_HOSTNAME}`))
+    .catch(err => console.error('smtp not ok:', err));
+}
+
+console.log(`will be posting to ${HERALD_ENDPOINT}`);
