@@ -31,6 +31,8 @@ const SMTP_SECURE = process.env.SMTP_SECURE || (SMTP_PORT == 465);
 const SMTP_USERNAME = process.env.SMTP_USERNAME || EMAIL_SENDER_ADDRESS;
 const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
 
+const SIGUSR1_TEST = process.env.SIGUSR1_TEST;
+
 const ringEdge = 0; // ring on falling edge
 
 function notifyHerald() {
@@ -80,7 +82,7 @@ function postNotifications() {
 
   if (mailer) notifications.push(sendEmailNotification()
     .then(info => console.log('email sent:', info)));
-  
+
   return Promise.all(notifications.map(p => p.catch(console.error)));
 }
 
@@ -104,8 +106,15 @@ process.on('SIGINT', () => {
 });
 
 process.on('SIGUSR1', () => {
-  console.log('received SIGUSR1, synthesizing sensor trigger');
-  return sensorTriggered();
+  if (SIGUSR1_TEST == 'email') {
+    console.log('received SIGUSR1, sending test email');
+    return sendEmailNotification()
+      .then(info => console.log('email sent:', info))
+      .catch(console.error);
+  } else {
+    console.log('received SIGUSR1, synthesizing sensor trigger');
+    return sensorTriggered();
+  }
 });
 
 if (mailer) {
