@@ -76,8 +76,8 @@ function sendEmailNotification() {
 function postNotifications() {
   const notifications = [notifyHerald()];
 
-  if (mailer) notifications.push(sendEmailNotification())
-    .then(info => console.log('email sent:', info));
+  if (mailer) notifications.push(sendEmailNotification()
+    .then(info => console.log('email sent:', info)));
   
   return Promise.all(notifications.map(p => p.catch(console.error)));
 }
