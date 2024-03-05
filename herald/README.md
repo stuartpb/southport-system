@@ -23,3 +23,12 @@ cd southport-system/herald
 npm install
 sudo systemctl enable --now $PWD/southport-herald.service
 ```
+
+## Testing
+
+You can test the server by POSTing requests to it directly, eg. via `curl`:
+
+```sh
+curl -X POST 'http://localhost:3000/ring?duration=5000'
+curl -X POST 'http://localhost:3000/present/still?location=https://blogs.library.duke.edu/bitstreams/files/2016/06/indian_head-1024x768.jpg&duration=5000'
+```
