@@ -119,8 +119,8 @@ process.on('SIGUSR1', () => {
 
 if (mailer) {
   console.log(`will be emailing ${EMAIL_RECIPIENT
-    } from ${EMAIL_SENDER_ADDRESS}`);
-  mailer.verify().then(() => console.log(`smtp ok at ${SMTP_HOSTNAME}`))
+    } from ${EMAIL_SENDER_ADDRESS} via ${SMTP_HOSTNAME}:${SMTP_PORT}`);
+  mailer.verify().then(() => console.log(`smtp login ok`))
     .catch(err => console.error('smtp not ok:', err));
 }
 
