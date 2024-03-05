@@ -64,7 +64,7 @@ const mailer = EMAIL_RECIPIENT && nodemailer.createTransport({
 function sendEmailNotification() {
   const cid = uuid();
   return mailer.sendMail({
-    from: `${JSON.stringify(EMAIL_SENDER_NAME)} <${EMAIL_SENDER_ADDRESS}>`,
+    from: {name: EMAIL_SENDER_NAME, address: EMAIL_SENDER_ADDRESS},
     to: EMAIL_RECIPIENT,
     subject: `Vehicle Detected from ${
       EMAIL_SENDER_NAME} at ${new Date().toLocaleString()}`,
