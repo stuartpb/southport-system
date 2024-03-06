@@ -1,19 +1,19 @@
-const Gpio = require('onoff').Gpio;
+import {Gpio} from 'onoff';
+import morgan from 'morgan';
+import {$} from 'execa';
+import express from 'express';
 
 // Relay for ringing the doorbell.
 const relay = new Gpio(4, 'high', {activeLow: true});
 
-const morgan = require('morgan');
-
-const execa = require('execa');
-
-const app = require('express')();
+const app = express();
 
 const DISPLAY = ':0';
 const X_UID = 1000;
 const X_GID = 1000;
 const HOME = '/home/southport'; // feh fails without HOME in the environment
 // hardcoding this location is admittedly pretty hacky, but meh
+const asDesktopUser = $({uid: X_UID, gid: X_GID, env: {DISPLAY, HOME}});
 
 app.use(morgan('[:date[iso]] :remote-addr ":method :url HTTP/:http-version" :status :res[content-length]'));
 
@@ -61,8 +61,7 @@ function startViewerProcess(location, duration) {
   }
 
   // set up a new viewer process
-  viewerProcess = execa('feh', ['-F', location], {
-    uid: X_UID, gid: X_GID, env: {DISPLAY, HOME}});
+  viewerProcess = asDesktopUser`feh -F ${location}`;
 
   // log any errors, except the one we're expecting
   viewerProcess.catch(logNonSigTermErrors);
@@ -80,8 +79,7 @@ function startViewerProcess(location, duration) {
 app.post('/present/still', (req, res, next) => {
   return Promise.all([
     // wake the display
-    execa('xset', 'dpms force on'.split(' '), {
-      uid: X_UID, gid: X_GID, env: {DISPLAY}}),
+    asDesktopUser`xset dpms force on`,
     // present the still
     startViewerProcess(req.query.location, req.query.duration)
 

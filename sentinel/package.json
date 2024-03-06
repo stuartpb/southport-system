@@ -1,18 +1,21 @@
 {
   "name": "southport-sentinel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Stuart P. Bentley <s@stuartpb.com>",
   "license": "ISC",
   "dependencies": {
-    "lodash.debounce": "^4.0.8",
-    "node-fetch": "^2.6.9",
-    "nodemailer": "^6.9.1",
+    "debounce": "^2.0.0",
+    "nodemailer": "^6.9.11",
     "onoff": "^6.0.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
