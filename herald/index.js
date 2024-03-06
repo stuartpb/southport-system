@@ -2,6 +2,7 @@ import {Gpio} from 'onoff';
 import morgan from 'morgan';
 import {$} from 'execa';
 import express from 'express';
+import {Readable} from 'stream';
 
 // Relay for ringing the doorbell.
 const relay = new Gpio(4, 'high', {activeLow: true});
@@ -53,15 +54,15 @@ function killViewerProcess() {
   return viewerProcess.then(lose, lose);
 }
 
-function startViewerProcess(location, duration) {
+async function startViewerProcess(imageStream, duration) {
   // defer to the termination of any existing viewer process
   if (viewerProcess) {
-    return killViewerProcess().then(
-      startViewerProcess.bind(null, location, duration));
+    await killViewerProcess();
+    return startViewerProcess(imageStream, duration);
   }
 
   // set up a new viewer process
-  viewerProcess = asDesktopUser`feh -F ${location}`;
+  viewerProcess = asDesktopUser({input: imageStream})`feh -F -`;
 
   // log any errors, except the one we're expecting
   viewerProcess.catch(logNonSigTermErrors);
@@ -70,10 +71,13 @@ function startViewerProcess(location, duration) {
   if (duration) {
     viewerTimeout = setTimeout(killViewerProcess, duration);
   }
+}
 
-  // ensure that we're returning a resolved Promise context,
-  // whether this was called from killViewerProcess.then or not
-  return Promise.resolve();
+async function fetchAndDisplay(location, duration) {
+  const res = await fetch(location);
+  if (!res.ok) throw new Error(
+    `HTTP error fetching image: ${response.status} ${response.statusText}`);
+  return startViewerProcess(Readable.fromWeb(res.body), duration);
 }
 
 app.post('/present/still', (req, res, next) => {
@@ -81,9 +85,9 @@ app.post('/present/still', (req, res, next) => {
     // wake the display
     asDesktopUser`xset dpms force on`,
     // present the still
-    startViewerProcess(req.query.location, req.query.duration)
+    fetchAndDisplay(req.query.location, req.query.duration)
 
-    ].map(p=>p.catch(next))).then(()=>res.send());
+    ].map(p => p.catch(next))).then(() => res.send());
 });
 
 app.listen(80);
