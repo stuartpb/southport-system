@@ -2,6 +2,7 @@ import {Gpio} from 'onoff';
 import debounce from 'debounce';
 import {v4 as uuid} from 'uuid';
 import nodemailer from 'nodemailer';
+import {Readable} from 'stream';
 
 const sensor = new Gpio(3, 'in', 'both');
 
@@ -75,7 +76,7 @@ async function sendEmailNotification() {
     html: `<img src="cid:${cid}">`,
     attachments: [{
       filename: EMAIL_ATTACHMENT_FILENAME,
-      content: res.body,
+      content: Readable.fromWeb(res.body),
       cid }]
   });
 }

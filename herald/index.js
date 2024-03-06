@@ -2,6 +2,7 @@ import {Gpio} from 'onoff';
 import morgan from 'morgan';
 import {$} from 'execa';
 import express from 'express';
+import {Readable} from 'stream';
 
 // Relay for ringing the doorbell.
 const relay = new Gpio(4, 'high', {activeLow: true});
@@ -76,7 +77,7 @@ async function fetchAndDisplay(location, duration) {
   const res = await fetch(location);
   if (!res.ok) throw new Error(
     `HTTP error fetching image: ${response.status} ${response.statusText}`);
-  return startViewerProcess(res.body, duration);
+  return startViewerProcess(Readable.fromWeb(res.body), duration);
 }
 
 app.post('/present/still', (req, res, next) => {
