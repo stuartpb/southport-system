@@ -61,8 +61,11 @@ const mailer = EMAIL_RECIPIENT && nodemailer.createTransport({
   },
 });
 
-function sendEmailNotification() {
+async function sendEmailNotification() {
   const cid = uuid();
+  const res = await fetch(SNAP_URL);
+  if (!res.ok) throw new Error(
+    `HTTP error fetching image: ${response.status} ${response.statusText}`);
   return mailer.sendMail({
     from: {name: EMAIL_SENDER_NAME, address: EMAIL_SENDER_ADDRESS},
     to: EMAIL_RECIPIENT,
@@ -72,7 +75,7 @@ function sendEmailNotification() {
     html: `<img src="cid:${cid}">`,
     attachments: [{
       filename: EMAIL_ATTACHMENT_FILENAME,
-      path: SNAP_URL,
+      content: res.body,
       cid }]
   });
 }
