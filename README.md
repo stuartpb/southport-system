@@ -15,7 +15,7 @@ From the desktop GUI, set the hostname for the system as applicable (consult you
 To install Node.js, from a root terminal (ie. opening a terminal and running `sudo -i`):
 
 ```
-curl -sL https://deb.nodesource.com/setup_20.x | bash -
+curl -sL https://deb.nodesource.com/setup_21.x | bash -
 apt install nodejs
 ```
 

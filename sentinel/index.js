@@ -1,9 +1,9 @@
-const Gpio = require('onoff').Gpio;
-const fetch = require('node-fetch');
-const debounce = require('lodash.debounce');
+import {Gpio} from 'onoff';
+import debounce from 'debounce';
+import {v4 as uuid} from 'uuid';
+import nodemailer from 'nodemailer';
+
 const sensor = new Gpio(3, 'in', 'both');
-const { v4: uuid } = require('uuid');
-const nodemailer = require("nodemailer");
 
 function ensureHttp(address) {
   if (!/https?:/.test(address)) address = 'http://' + address;
@@ -87,7 +87,7 @@ function postNotifications() {
 }
 
 const sensorTriggered = debounce(postNotifications, DEBOUNCE_TIME, {
-  leading: true, trailing: false, maxWait: DEBOUNCE_TIME
+  immediate: true
 });
 
 sensor.watch((err, value) => {
