@@ -40,7 +40,7 @@ let viewerTimeout = null;
 
 function logNonSigTermErrors(e) {
   // if the process wasn't terminated by SIGTERM, log this error
-  if (e.code != 143) console.error(e);
+  if (e.exitCode != 143) console.error(e);
 }
 
 function killViewerProcess() {
