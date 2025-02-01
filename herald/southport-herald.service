@@ -1,8 +1,13 @@
 [Unit]
 Description=Southport Herald Service
 After=network.target
+Wants=network.target
+
+StartLimitIntervalSec=30
+StartLimitBurst=5
 
 [Service]
+Restart=on-failure
 ExecStart=/usr/bin/node /home/southport/southport-system/herald/index.js
 
 [Install]
